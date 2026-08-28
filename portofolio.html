@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmad Sappauni — Web Developer & GIS Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16202A;
+    --paper:#EDF1EC;
+    --paper-2:#E4E9E1;
+    --panel:#16202A;
+    --panel-text:#EDF1EC;
+    --teal:#1F6F5C;
+    --teal-deep:#134A3D;
+    --marker:#D6472B;
+    --line:#C4CBBC;
+    --muted:#5C6660;
+    --display:'Space Grotesk',sans-serif;
+    --body:'IBM Plex Sans',sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  .coord{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(237,241,236,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1080px;margin:0 auto;
+  }
+  .brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:0.01em;}
+  .brand span{color:var(--teal);}
+  nav.links{display:flex;gap:26px;}
+  nav.links a{
+    font-family:var(--mono);font-size:12px;text-transform:uppercase;
+    letter-spacing:0.08em;color:var(--ink);text-decoration:none;
+    padding-bottom:2px;border-bottom:1px solid transparent;
+    transition:border-color .2s;
+  }
+  nav.links a:hover{border-color:var(--teal);}
+  @media (max-width:640px){ nav.links{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:96px 0 84px;
+    border-bottom:1px solid var(--line);
+  }
+  .contour-bg{
+    position:absolute;inset:0;z-index:0;opacity:0.55;
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;z-index:1;}
+  .eyebrow-row{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+  .pin{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--marker);
+    box-shadow:0 0 0 0 rgba(214,71,43,0.55);
+    animation:pulse 2.4s ease-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(214,71,43,0.45);}
+    70%{box-shadow:0 0 0 10px rgba(214,71,43,0);}
+    100%{box-shadow:0 0 0 0 rgba(214,71,43,0);}
+  }
+  @media (prefers-reduced-motion: reduce){ .pin{animation:none;} }
+  h1.name{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(40px,7vw,72px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    max-width:780px;
+  }
+  .headline{
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--teal-deep);
+    max-width:640px;
+    line-height:1.7;
+  }
+  .headline b{color:var(--ink);}
+  .hero-lede{
+    margin-top:22px;font-size:16.5px;max-width:600px;color:#33413A;
+  }
+  .hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:0.05em;
+    text-transform:uppercase;text-decoration:none;
+    padding:13px 22px;border-radius:2px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s, background .15s;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:var(--teal-deep);transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--ink);color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper);transform:translateY(-1px);}
+
+  /* ---------- SECTION LABEL ---------- */
+  .section{padding:76px 0;border-bottom:1px solid var(--line);}
+  .section:last-of-type{border-bottom:none;}
+  .sec-label{
+    display:flex;align-items:baseline;gap:14px;margin-bottom:36px;
+  }
+  .sec-label .tag{
+    font-family:var(--mono);font-size:11.5px;color:var(--teal);
+    letter-spacing:0.1em;text-transform:uppercase;
+  }
+  .sec-label h2{
+    font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-0.01em;
+  }
+  .sec-label .rule{flex:1;height:1px;background:var(--line);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;}
+  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
+  .about-text p{margin-bottom:16px;font-size:15.5px;color:#2A342E;}
+  .about-text p:last-child{margin-bottom:0;}
+  .data-card{
+    background:var(--panel);color:var(--panel-text);
+    padding:26px 24px;border-radius:2px;
+  }
+  .data-card .dc-title{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.1em;
+    text-transform:uppercase;color:#8FB6AA;margin-bottom:18px;
+  }
+  .dc-row{
+    display:flex;justify-content:space-between;gap:12px;
+    padding:10px 0;border-bottom:1px solid rgba(237,241,236,0.12);
+    font-family:var(--mono);font-size:12.5px;
+  }
+  .dc-row:last-child{border-bottom:none;}
+  .dc-row .k{color:#9FB0A8;}
+  .dc-row .v{text-align:right;}
+
+  /* ---------- LAYERS / SKILLS ---------- */
+  .layers-panel{
+    border:1px solid var(--line);background:#F4F6F1;
+  }
+  .layer-group{border-bottom:1px solid var(--line);}
+  .layer-group:last-child{border-bottom:none;}
+  .layer-group-title{
+    padding:14px 20px;font-family:var(--mono);font-size:11.5px;
+    letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);
+    background:var(--paper-2);
+  }
+  .layer-items{display:flex;flex-wrap:wrap;gap:0;}
+  .layer-item{
+    display:flex;align-items:center;gap:10px;
+    padding:13px 20px;font-size:14px;width:33.33%;
+    border-top:1px solid var(--line);
+  }
+  .layer-item:nth-child(-n+3){border-top:none;}
+  @media (max-width:760px){
+    .layer-item{width:50%;}
+    .layer-item:nth-child(-n+3){border-top:1px solid var(--line);}
+    .layer-item:nth-child(-n+2){border-top:none;}
+  }
+  @media (max-width:480px){
+    .layer-item{width:100%;border-top:1px solid var(--line) !important;}
+    .layer-item:first-child{border-top:none !important;}
+  }
+  .swatch{width:9px;height:9px;flex-shrink:0;background:var(--teal);}
+
+  /* ---------- PROJECTS ---------- */
+  .project{
+    display:grid;grid-template-columns:280px 1fr;gap:36px;
+    padding:32px 0;border-top:1px solid var(--line);
+  }
+  .project:first-child{border-top:none;}
+  @media (max-width:760px){ .project{grid-template-columns:1fr;} }
+  .project-thumb{
+    aspect-ratio:4/3;background:
+      repeating-linear-gradient(135deg, #DEE5DA 0 10px, #E4E9E1 10px 20px);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .project-thumb .ph-label{
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:0.08em;text-align:center;
+    background:var(--paper);padding:6px 10px;border:1px dashed var(--line);
+  }
+  .project-layer-tag{
+    font-family:var(--mono);font-size:11px;color:var(--marker);
+    letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;
+  }
+  .project h3{
+    font-family:var(--display);font-size:21px;font-weight:600;margin-bottom:10px;
+  }
+  .project p.desc{font-size:14.5px;color:#2A342E;margin-bottom:14px;}
+  .stack-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .chip{
+    font-family:var(--mono);font-size:11px;padding:5px 10px;
+    background:var(--paper-2);border:1px solid var(--line);
+    text-transform:uppercase;letter-spacing:0.04em;
+  }
+  .feat-list{list-style:none;margin-bottom:16px;}
+  .feat-list li{
+    font-size:13.5px;color:#33413A;padding-left:16px;position:relative;margin-bottom:6px;
+  }
+  .feat-list li::before{
+    content:"·";position:absolute;left:0;color:var(--teal);font-weight:700;
+  }
+  .repo-link{
+    font-family:var(--mono);font-size:12px;color:var(--teal-deep);
+    text-decoration:none;border-bottom:1px solid var(--teal-deep);
+    padding-bottom:1px;
+  }
+  .repo-link:hover{color:var(--marker);border-color:var(--marker);}
+
+  /* ---------- EXPERIENCE ---------- */
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{
+    content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line);
+  }
+  .t-item{position:relative;padding-bottom:30px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-item::before{
+    content:"";position:absolute;left:-26px;top:5px;width:9px;height:9px;
+    background:var(--teal);border-radius:50%;
+  }
+  .t-period{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .t-role{font-family:var(--display);font-weight:600;font-size:17px;margin:4px 0 6px;}
+  .t-org{font-size:13.5px;color:var(--teal-deep);margin-bottom:8px;}
+  .t-desc{font-size:14px;color:#33413A;max-width:640px;}
+
+  /* ---------- CERTS ---------- */
+  .cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  @media (max-width:640px){ .cert-grid{grid-template-columns:1fr;} }
+  .cert{
+    border:1px solid var(--line);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;
+    background:#F4F6F1;
+  }
+  .cert .cert-mark{
+    font-family:var(--mono);font-size:10px;color:#fff;background:var(--teal);
+    padding:3px 6px;flex-shrink:0;margin-top:2px;
+  }
+  .cert .cert-name{font-size:13.5px;color:#20281f;}
+
+  /* ---------- CONTACT ---------- */
+  .contact-inner{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;}
+  .avatar-ph{
+    width:104px;height:104px;border-radius:50%;flex-shrink:0;
+    overflow:hidden;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+  }
+  .avatar-ph img{
+    width:100%;height:100%;display:block;
+    object-fit:cover;
+    object-position:center;
+  }
+  .contact-block{flex:1;min-width:240px;}
+  .contact-block p{font-size:15px;color:#2A342E;max-width:520px;margin-bottom:22px;}
+  .contact-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+  .contact-row{
+    font-family:var(--mono);font-size:13.5px;display:flex;gap:10px;align-items:center;
+  }
+  .contact-row .k{color:var(--muted);min-width:78px;display:inline-block;}
+
+  footer{
+    padding:30px 0;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  }
+  footer .coord{font-size:11px;}
+  
+  .project-thumb{
+  aspect-ratio:4/3;
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+
+.project-thumb img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">Ahmad<span>.</span>S</div>
+    <nav class="links">
+      <a href="#about">Tentang</a>
+      <a href="#skills">Layer</a>
+      <a href="#projects">Proyek</a>
+      <a href="#experience">Pengalaman</a>
+      <a href="#certs">Sertifikasi</a>
+      <a href="#contact">Kontak</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="contour-bg" viewBox="0 0 1080 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <g fill="none" stroke="#1F6F5C" stroke-width="1">
+      <path d="M -50 60 C 200 20, 400 100, 650 50 S 1000 90, 1130 40" opacity="0.18"/>
+      <path d="M -50 110 C 220 70, 420 150, 660 100 S 980 140, 1130 90" opacity="0.15"/>
+      <path d="M -50 160 C 250 120, 440 200, 670 150 S 960 190, 1130 140" opacity="0.12"/>
+      <path d="M -50 210 C 260 170, 460 250, 690 200 S 950 240, 1130 190" opacity="0.10"/>
+      <path d="M -50 260 C 270 220, 470 300, 700 250 S 940 290, 1130 240" opacity="0.08"/>
+      <path d="M -50 310 C 280 270, 480 350, 710 300 S 930 340, 1130 290" opacity="0.06"/>
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <div class="eyebrow-row">
+      <span class="pin"></span>
+      <span class="coord">3°19'S 114°35'E — Banjarmasin, Kalimantan Selatan</span>
+    </div>
+    <h1 class="name">Ahmad Sappauni</h1>
+    <div class="headline">
+      <b>Web Developer</b> · GIS / WebGIS Development · Laravel, PostGIS, Leaflet.js · Fresh Graduate ULM
+    </div>
+    <p class="hero-lede">
+      Lulusan S1 Pendidikan Komputer FKIP Universitas Lambung Mangkurat. Membangun aplikasi web berbasis Laravel dan sistem informasi geografis (WebGIS) — dari pemetaan data spasial hingga dashboard operasional bisnis.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#projects">Lihat Proyek</a>
+      <a class="btn btn-ghost" href="#contact">Hubungi Saya</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 00</span>
+      <h2>Tentang</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Saya fokus pada pengembangan web dengan Laravel dan pengembangan sistem informasi geografis (WebGIS) menggunakan Leaflet.js dan PostgreSQL/PostGIS. Skripsi saya membangun WebGIS untuk pengelolaan dan visualisasi persebaran alumni, lengkap dengan basemap switcher, choropleth, dan marker clustering.</p>
+        <p>Di luar akademik, saya membangun aplikasi pengelolaan rental untuk kebutuhan bisnis nyata, serta sistem deteksi komentar bullying di YouTube menggunakan Python dan NLP. Saya juga pernah mengajar Informatika di tingkat SMA dan menjadi asisten praktikum untuk tiga mata kuliah pemrograman di kampus.</p>
+      </div>
+      <div class="data-card">
+        <div class="dc-title">Ringkasan Data</div>
+        <div class="dc-row"><span class="k">Lokasi</span><span class="v">Banjarmasin, Kalsel</span></div>
+        <div class="dc-row"><span class="k">Pendidikan</span><span class="v">S1 Pendidikan Komputer, ULM</span></div>
+        <div class="dc-row"><span class="k">Fokus</span><span class="v">Web Dev &amp; WebGIS</span></div>
+        <div class="dc-row"><span class="k">Stack Utama</span><span class="v">Laravel · PostGIS · Leaflet.js</span></div>
+        <div class="dc-row"><span class="k">Sertifikasi</span><span class="v">BNSP Jr. Web Programmer</span></div>
+        <div class="dc-row"><span class="k">Status</span><span class="v">Fresh Graduate</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 01</span>
+      <h2>Tumpukan Teknologi</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="layers-panel">
+      <div class="layer-group">
+        <div class="layer-group-title">Backend &amp; Frontend</div>
+        <div class="layer-items">
+          <div class="layer-item"><span class="swatch"></span>Laravel</div>
+          <div class="layer-item"><span class="swatch"></span>PHP</div>
+          <div class="layer-item"><span class="swatch"></span>Python</div>
+          <div class="layer-item"><span class="swatch"></span>JavaScript</div>
+          <div class="layer-item"><span class="swatch"></span>WordPress / WooCommerce</div>
+          <div class="layer-item"><span class="swatch"></span>Chart.js</div>
+        </div>
+      </div>
+      <div class="layer-group">
+        <div class="layer-group-title">Database &amp; GIS</div>
+        <div class="layer-items">
+          <div class="layer-item"><span class="swatch"></span>MySQL</div>
+          <div class="layer-item"><span class="swatch"></span>PostgreSQL / PostGIS</div>
+          <div class="layer-item"><span class="swatch"></span>Leaflet.js</div>
+          <div class="layer-item"><span class="swatch"></span>QGIS</div>
+          <div class="layer-item"><span class="swatch"></span>OpenStreetMap / Nominatim</div>
+          <div class="layer-item"><span class="swatch"></span>phpMyAdmin</div>
+        </div>
+      </div>
+      <div class="layer-group">
+        <div class="layer-group-title">Data &amp; Tools</div>
+        <div class="layer-items">
+          <div class="layer-item"><span class="swatch"></span>Pandas / NLP</div>
+          <div class="layer-item"><span class="swatch"></span>Git &amp; GitHub</div>
+          <div class="layer-item"><span class="swatch"></span>MS Excel (Corporate Mastery)</div>
+          <div class="layer-item"><span class="swatch"></span>MS Word (Professional Mastery)</div>
+          <div class="layer-item"><span class="swatch"></span>Desain Digital</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 02</span>
+      <h2>Proyek Terpilih</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="project">
+      <div class="project-thumb"><img src="D:\portofolio\Screenshot 2026-08-28 212244.png" alt="Tampilan WebGIS Pengelolaan Alumni"></div>
+      <div>
+        <div class="project-layer-tag">Proyek Utama — Skripsi</div>
+        <h3>WebGIS Pengelolaan &amp; Visualisasi Persebaran Alumni</h3>
+        <p class="desc">Sistem informasi geografis untuk mengelola dan memvisualisasikan sebaran alumni Program Studi Pendidikan Komputer FKIP ULM di Kalimantan Selatan, lengkap dengan dashboard informasi.</p>
+        <div class="stack-chips">
+          <span class="chip">Laravel</span><span class="chip">Leaflet.js</span><span class="chip">PostgreSQL/PostGIS</span><span class="chip">OpenStreetMap</span><span class="chip">QGIS</span><span class="chip">Chart.js</span>
+        </div>
+        <ul class="feat-list">
+          <li>Basemap switcher (OpenStreetMap ↔ Peta Rupa Bumi Indonesia/BIG) dengan fallback otomatis</li>
+          <li>Choropleth persebaran alumni per wilayah</li>
+          <li>Marker clustering untuk visualisasi titik data yang padat</li>
+        </ul>
+        <a class="repo-link" href="https://github.com/AhmadSappauni/gis_alumni_update.git" target="_blank" rel="noopener">github.com/AhmadSappauni/gis_alumni_update →</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-thumb"><img src="D:\portofolio\Screenshot 2026-08-28 212153.png" alt="Tampilan Aplikasi Rental PS"></div>
+      <div>
+        <div class="project-layer-tag">Proyek Kedua</div>
+        <h3>Aplikasi Pengelolaan Rental</h3>
+        <p class="desc">Sistem manajemen operasional bisnis rental — mencatat arus kas, mengelola stok, dan memberi pemilik usaha visibilitas penuh atas kinerja karyawan dan pendapatan.</p>
+        <div class="stack-chips">
+          <span class="chip">Laravel</span><span class="chip">MySQL</span>
+        </div>
+        <ul class="feat-list">
+          <li>Rekap pemasukan dan pengeluaran dalam bentuk chart, dengan fitur export laporan</li>
+          <li>Absensi karyawan dan pengelolaan stok barang jualan</li>
+          <li>Fitur pemantauan karyawan dan penghasilan khusus untuk pemilik usaha</li>
+        </ul>
+        <a class="repo-link" href="https://github.com/AhmadSappauni/fixplay_copy-ketiga.git" target="_blank" rel="noopener">github.com/AhmadSappauni/fixplay_copy-ketiga →</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-thumb"><img src="D:\portofolio\Screenshot 2026-08-28 212459.png" alt="Tampilan LLM"></div>
+      <div>
+        <div class="project-layer-tag">Proyek Ketiga — SIB Hacktivate</div>
+        <h3>YouTube Bullying Comment Detection System</h3>
+        <p class="desc">Sistem deteksi komentar bullying berbahasa Indonesia pada video YouTube, dibangun sebagai bagian dari program Studi Independen Bersertifikat Hacktivate (fokus IBM Generative AI &amp; Machine Learning).</p>
+        <div class="stack-chips">
+          <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">NLP</span><span class="chip">Naive Bayes</span>
+        </div>
+        <ul class="feat-list">
+          <li>Scraping komentar YouTube langsung dari tautan video</li>
+          <li>Analisis dan penghitungan kata-kata bullying pada komentar</li>
+          <li>Akurasi deteksi ~90% pada data komentar berbahasa Indonesia</li>
+        </ul>
+        <a class="repo-link" href="https://github.com/AhmadSappauni/deploy_model_llm.git" target="_blank" rel="noopener">github.com/AhmadSappauni/deploy_model_llm →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 03</span>
+      <h2>Pengalaman</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-period">Mei 2025 — Juni 2026</div>
+        <div class="t-role">Staff Kitchen</div>
+        <div class="t-org">Baraka Coffee</div>
+        <div class="t-desc">Barista dan penyiapan makanan/minuman. Mendesain spanduk, banner, dan menu cafe yang berhasil meningkatkan keramaian jam makan siang. Ditunjuk mengawasi operasional saat manajer tidak ada.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-period">Juli — Desember 2025</div>
+        <div class="t-role">Guru Informatika SMA</div>
+        <div class="t-org">SMAS Global Islamic Boarding School</div>
+        <div class="t-desc">Mengajar ±30 siswa mata pelajaran Informatika (Kurikulum Merdeka), dengan materi pembuatan web interaktif menggunakan PHP. Menyusun rencana pembelajaran dan melakukan evaluasi rutin tiap sesi.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-period">Perkuliahan</div>
+        <div class="t-role">Asisten Praktikum</div>
+        <div class="t-org">FKIP ULM — Pendidikan Komputer</div>
+        <div class="t-desc">Mendampingi praktikum Pemrograman Dasar 1 (dasar Python), Basis Data (MySQL &amp; phpMyAdmin), dan Pemrograman Web 2 (pengembangan web interaktif dengan Laravel).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="certs">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 04</span>
+      <h2>Sertifikasi &amp; Pelatihan</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="cert-grid">
+      <div class="cert"><span class="cert-mark">BNSP</span><span class="cert-name">Sertifikasi Kompetensi Junior Web Programmer</span></div>
+      <div class="cert"><span class="cert-mark">SIB</span><span class="cert-name">Studi Independen Bersertifikat Angkatan 7 — Hacktivate (IBM Gen AI &amp; Machine Learning)</span></div>
+      <div class="cert"><span class="cert-mark">TRN</span><span class="cert-name">Corporate Excel Mastery</span></div>
+      <div class="cert"><span class="cert-mark">TRN</span><span class="cert-name">Professional Word Mastery</span></div>
+      <div class="cert"><span class="cert-mark">PIL</span><span class="cert-name">Pelatihan Desain Digital PILKOM 2024</span></div>
+      <div class="cert"><span class="cert-mark">PKM</span><span class="cert-name">Pengisi Paduan Suara — Pekan Kreativitas Mahasiswa 2022</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="sec-label">
+      <span class="tag">Layer 05</span>
+      <h2>Kontak</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="contact-inner">
+      <div class="avatar-ph"><img src="apau.jpg" alt="Foto profil Ahmad Sappauni"></div>
+      <div class="contact-block">
+        <p>Terbuka untuk peluang sebagai Web Developer, GIS/Data Analyst, atau Admin. Silakan hubungi saya melalui email atau WhatsApp di bawah ini.</p>
+        <div class="contact-list">
+          <div class="contact-row"><span class="k">Email</span><a href="mailto:ahmadsapauni8989@gmail.com">ahmadsapauni8989@gmail.com</a></div>
+          <div class="contact-row"><span class="k">WhatsApp</span><a href="https://wa.me/6283155611973" target="_blank" rel="noopener">+62 831-5561-1973</a></div>
+          <div class="contact-row"><span class="k">Lokasi</span><span>Banjarmasin, Kalimantan Selatan</span></div>
+        </div>
+        <a class="btn btn-primary" href="mailto:ahmadsapauni8989@gmail.com">Kirim Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:10px;">
+    <span class="coord">Ahmad Sappauni © 2026</span>
+    <span class="coord">3°19'S 114°35'E — Banjarmasin, ID</span>
+  </div>
+</footer>
+
+</body>
+</html>
